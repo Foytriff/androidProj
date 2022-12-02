@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, Text, View,TouchableWithoutFeedback} from 'reac
 import { Bird } from './components/Bird';
 import React,{useState, useEffect} from 'react';
 import { Obstacle } from './components/Obstacle';
+import { StopButton } from './components/StopButton';
 
 
 export default function App() {
@@ -19,27 +20,37 @@ export default function App() {
   const [obstaclesLeft, setObstaclesLeft] = useState(screenWidth)
   const [obstaclesLeft2, setObstaclesLeft2] = useState(screenWidth + screenWidth/2 + 30)
 
+  const [score, setScore] = useState(0)
   // bird vals
   const gravity = 8
   //obstvals
   const oWidth = 50
   const oHeight = screenHeight
-  const oGap = 150
+  const oGap = 200
   const obstSpeed = 5
 
   let gameTimer
   let obstaclesLeftTimer
   let obstaclesLeftTimer2
 
+  const gameOver = () => {
+    console.log("ballonger!")
+    clearInterval(gameTimer)
+    clearInterval(obstaclesLeftTimer)
+    clearInterval(obstaclesLeftTimer2)
+  }
+
+
   useEffect(() => {
     if (birdBottom > 0){
       gameTimer = setInterval(() => {
           setBirdBottom(prev => prev - gravity)
       }, 30)
-    }
 
-    return () => {
-      clearInterval(gameTimer)
+      return () => {
+        clearInterval(gameTimer)
+      }
+
     }
   },[birdBottom])
 
@@ -52,10 +63,13 @@ export default function App() {
     return () => {
       clearInterval(obstaclesLeftTimer)
     }
+
     } else {
       setObstaclesLeft(screenWidth)
       setObstOffset(- Math.random() * (screenHeight/2 - oGap))
+      setScore(prev => prev + 1)
     }
+
 
   },[obstaclesLeft])
 
@@ -66,32 +80,30 @@ export default function App() {
           setObstaclesLeft2(prev => prev - obstSpeed)
       }, 30)
       
-    return () => {
-      clearInterval(obstaclesLeftTimer2)
-    }
+      return () => {
+        clearInterval(obstaclesLeftTimer2)
+      }
+
     } else {
       setObstaclesLeft2(screenWidth)
       setObstOffset2((-100 + (Math.random() * (screenHeight/2 - oGap))))
+      setScore(prev => prev + 1)
     }
-
+    
   },[obstaclesLeft2])
 
 
   // check for collissions
   useEffect(() =>{
 
+  })
 
 
-  }, [])
-
-
-  const [birdHurtBox, setBirdHurtBox] = {
-    
-  }
+  const [birdHurtBox, setBirdHurtBox] = useState()
 
 
   const jump = () => {
-    console.log(birdBottom)
+    
     setBirdBottom(prev => 
       { if (prev + 40 >= screenHeight){
         return screenHeight
@@ -106,19 +118,19 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={jump}>
       <View style={styles.container}>
+
+      <StopButton stopGame={gameOver}/>
+      <Text style={{position: 'absolute', top: 25, zIndex: 1}}>score: {score}</Text>
         <Bird birdBottom={birdBottom} birdLeft={birdLeft}/>
         <Obstacle width={oWidth} height={oHeight} gap={oGap} obstaclesLeft={obstaclesLeft} offset={obstOffset}/>
         <Obstacle width={oWidth} height={oHeight} gap={oGap} obstaclesLeft={obstaclesLeft2} offset={obstOffset2} />
         <StatusBar style="auto" />
+
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
-const gameOver = () => {
-  clearInterval(gameTimer)
-  clearInterval(obstaclesLeftTimer)
-}
 
 const styles = StyleSheet.create({
   container: {
