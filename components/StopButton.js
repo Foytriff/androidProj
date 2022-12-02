@@ -6,7 +6,7 @@ const StopButton = ({stopGame}) => {
 
 
     return(
-        <Pressable onPress={() => stopGame(true)} style={{
+        <Pressable onPress={() => stopGame(prev => !prev)} style={{
             position: 'absolute',
             zIndex: 1,
             top: 15,

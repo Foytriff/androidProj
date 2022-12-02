@@ -49,10 +49,21 @@ const GameScreen = () => {
       clearInterval(OTL.current)
       clearInterval(OTL2.current)
       clearInterval(gameTimer.current)
+      saveScore()
+    }
+
+    if(!stopGame){
+        setBirdBottom(prev => prev)
+        setObstaclesLeft(prev => prev)
+        setObstaclesLeft2(prev => prev)
     }
 
   }, [stopGame])
 
+
+  const saveScore = () => {
+    // send to db ({name: playername, score: score})
+  }
 
   useEffect(() => {
     if (birdBottom > 0){
@@ -103,7 +114,7 @@ const GameScreen = () => {
       setScore(prev => prev + 1)
     }
     
-  },[obstaclesLeft2])
+  }, [obstaclesLeft2])
 
 
   // check for collissions

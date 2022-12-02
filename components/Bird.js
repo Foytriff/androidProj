@@ -33,7 +33,7 @@ const Bird = ({birdBottom, birdLeft}) => {
             left: birdLeft - (birdWidth/2),
     
         }}
-        source={require('./Duck_2.png')}
+        source={require('./DuckFinal.png')}
       />
     )
 
