@@ -4,6 +4,8 @@ import { Bird } from "../components/Bird";
 import React, {useState, useEffect, useRef} from "react";
 import { Obstacle } from "../components/Obstacle";
 import { StopButton } from "../components/StopButton";
+import {sendToDb, findAll, saveToDb} from "../server"
+
 
 const styles = StyleSheet.create({
     container: {
@@ -61,8 +63,13 @@ const GameScreen = () => {
   }, [stopGame])
 
 
-  const saveScore = () => {
-    // send to db ({name: playername, score: score})
+  const saveScore = async () => {
+    console.log("send to db")
+    const temp = {name: "Gustav", value: score}
+    await saveToDb(temp)
+    findAll().then(res => console.log(res))
+    //saveScore({name: "Gustav", score: score})
+    //findAll().then(res => console.log(res))
   }
 
   useEffect(() => {

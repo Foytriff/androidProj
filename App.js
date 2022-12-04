@@ -6,14 +6,32 @@ import { GameScreen } from './screens/GameScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MainMenu } from './screens/MainMenu';
+import { initialDb } from './server';
 
 export default function App() {
 
+
+  const [dbInited, setDbInited] = useState(false)
    const screenWidth = Dimensions.get("screen").width
    const screenHeight = Dimensions.get("screen").height
 
   const Stack = createNativeStackNavigator();
 
+
+  useEffect(() => {
+
+    initialDb().then(res => {
+      console.log(res)
+      setDbInited(true)
+    })
+
+  }, [])
+
+  if(!dbInited) return <View style={{
+    position: 'absolute',
+    top: '35%',
+    right: '45%'
+  }}><Text>Waiting for db</Text></View>
 
   return (
     <NavigationContainer>

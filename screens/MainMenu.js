@@ -18,6 +18,10 @@ const MainMenu = () => {
 
             }} onPress={() => nav.navigate('game-screen')}>
         </Pressable>
+
+        <View>
+            
+        </View>
     </View>
 
 }
