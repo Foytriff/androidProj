@@ -39,9 +39,9 @@ const MainMenu = () => {
 
             }} onPress={() => nav.navigate('game-screen')}>
         </Pressable>
-        <View><HighScores /></View>
+        <View></View>
     </View>
 
 }
-
+//<HighScores />
 export {MainMenu}

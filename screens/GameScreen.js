@@ -37,6 +37,8 @@ const GameScreen = () => {
   const oHeight = screenHeight
   const oGap = 200
   const obstSpeed = 5
+  const [obHB, setObHB] = useState({top: 1, leftSide: 1, rightSide: 1})
+
 
   const [stopGame, setStopGame] = useState(false)
 
@@ -45,12 +47,16 @@ const GameScreen = () => {
   const OTL2 = useRef()
   //const test = [gameTimer, obstaclesLeft, obstaclesLeft2]
 
+  const gameOver = () => {
+    clearInterval(OTL.current)
+    clearInterval(OTL2.current)
+    clearInterval(gameTimer.current)
+  }
+
   useEffect(() => {
 
     if(stopGame){
-      clearInterval(OTL.current)
-      clearInterval(OTL2.current)
-      clearInterval(gameTimer.current)
+      gameOver()
       saveScore()
     }
 
@@ -61,7 +67,6 @@ const GameScreen = () => {
     }
 
   }, [stopGame])
-
 
   const saveScore = async () => {
     console.log("send to db")
@@ -89,6 +94,18 @@ const GameScreen = () => {
     if (obstaclesLeft > -oWidth){
       OTL.current = setInterval(() => {
           setObstaclesLeft(prev => prev - obstSpeed)
+          setObHB(prev => {
+
+                      
+            // check for collissions
+            let lowerObstPos = {
+              top: -oHeight/2 + obstOffset,
+              leftSide: obstaclesLeft + 10,
+              rightSide: obstaclesLeft - 10,
+            }
+
+            return lowerObstPos
+          })
       }, 30)
       
     return () => {
@@ -123,12 +140,22 @@ const GameScreen = () => {
     
   }, [obstaclesLeft2])
 
+  const birdHBx = screenWidth/2;
+  useEffect(() => {
+      if(
 
-  // check for collissions
+        birdHBx >= obHB.leftSide && birdHBx <= obHB.rightSide
   
+      ){
+        if(birdBottom < obHB.top){
+          console.log("died")
+          gameOver()
+        }
+      }
+    
+    
+  })
 
-
-  const [birdHurtBox, setBirdHurtBox] = useState()
 
 
   const jump = () => {
