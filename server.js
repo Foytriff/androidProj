@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite'
+import ScoreEntry from './ScoreEntry'
 
 const db = SQLite.openDatabase("scores.db")
 
@@ -46,7 +47,7 @@ export const findAll = () => {
             transaction.executeSql(
 
                 `SELECT * FROM score`, [],
-                 (_, res) => resolve(res),
+                 (_, res) => resolve(res.rows._array.map(row => new ScoreEntry(row.id, row.name, row.value))),
                   (_, err) => reject(err)
 
             )

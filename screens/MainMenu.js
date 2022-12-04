@@ -1,11 +1,32 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, Pressable, Dimensions } from "react-native";
+import { findAll } from "../server";
 
 const MainMenu = () => {
     const sWidth = Dimensions.get('screen').width
     const sHeight = Dimensions.get('screen').height
     const nav = useNavigation()
+
+    const [hsLoaded,setHsLoaded] = useState(false)
+    const [hses, setHses] = useState()
+
+    useEffect(() => {
+        findAll().then(res => {
+            setHses(res.map(sc => <View>
+                <Text>{sc.name}</Text>
+                <Text>{sc.value}</Text>
+            </View>))
+            setHsLoaded(true)
+        })
+    }, [])
+
+    const HighScores = () => {
+       
+        if (!hsLoaded) return <Text>Loading scores</Text>
+
+        return <View>{hses}</View>
+    }
 
     return <View>
         <Pressable style={{
@@ -18,10 +39,7 @@ const MainMenu = () => {
 
             }} onPress={() => nav.navigate('game-screen')}>
         </Pressable>
-
-        <View>
-            
-        </View>
+        <View><HighScores /></View>
     </View>
 
 }
