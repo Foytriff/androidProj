@@ -19,7 +19,7 @@ const MainMenu = () => {
             </View>))
             setHsLoaded(true)
         })
-    }, [])
+    })
 
     const HighScores = () => {
        
